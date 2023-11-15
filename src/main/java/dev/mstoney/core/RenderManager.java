@@ -1,7 +1,6 @@
 package dev.mstoney.core;
 
 import dev.mstoney.core.entity.Entity;
-import dev.mstoney.core.entity.Model;
 import dev.mstoney.core.utils.Transformation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

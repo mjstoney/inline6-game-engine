@@ -4,6 +4,8 @@ import dev.mstoney.core.*;
 import dev.mstoney.core.entity.Entity;
 import dev.mstoney.core.entity.Model;
 import dev.mstoney.core.entity.Texture;
+import dev.mstoney.core.utils.Constants;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
@@ -79,8 +81,8 @@ public class TestGame implements ILogic {
                 16, 18, 19, 17, 16, 19,
                 4, 6, 7, 5, 4, 7,
         };
-        Model model = loader.loadModel(vertices, textureCoords, indices);
-        model.setTexture(new Texture(loader.loadTexture("textures/grassblock.png")));
+        Model model = loader.loadOBJModel("/models/bunny.obj");
+        model.setTexture(new Texture(loader.loadTexture("textures/blue.png")));
         entity = new Entity(model,
                 new Vector3f(0, 0, 0),
                 new Vector3f(0, 0, 0),
@@ -113,8 +115,15 @@ public class TestGame implements ILogic {
     }
 
     @Override
-    public void update() {
+    public void update(float interval, MouseInput mouseInput) {
         camera.movePosition(cameraInc.x * CAMERA_MOVE_SPEED, cameraInc.y * CAMERA_MOVE_SPEED, cameraInc.z * CAMERA_MOVE_SPEED);
+        if (mouseInput.isRightButtonPress()) {
+            Vector2f rotate = mouseInput.getDisplVec();
+            camera.moveRotation(rotate.x * Constants.MOUSE_SENSITIVITY, rotate.y * Constants.MOUSE_SENSITIVITY, 0);
+        }
+
+
+
         entity.incRotation(0.0f, 0.5f, 0.5f);
     }
 
