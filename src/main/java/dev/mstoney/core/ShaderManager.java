@@ -1,6 +1,7 @@
 package dev.mstoney.core;
 
 import dev.mstoney.core.entity.Material;
+import dev.mstoney.core.lighting.DirectionalLight;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -35,6 +36,19 @@ public class ShaderManager {
         createUniform(uniformName + ".specular");
         createUniform(uniformName + ".hasTexture");
         createUniform(uniformName + ".reflectance");
+    }
+
+    public void createDirectionalLightUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".color");
+        createUniform(uniformName + ".direction");
+        createUniform(uniformName + ".intensity");
+    }
+
+    public void setUniform(String uniformName, DirectionalLight directionalLight) {
+        setUniform(uniformName + ".color", directionalLight.getColor());
+        setUniform(uniformName + ".direction", directionalLight.getDirection());
+        setUniform(uniformName + ".intensity", directionalLight.getIntensity());
+
     }
     public void setUniform(String uniformName, Matrix4f value) {
         try(MemoryStack stack = MemoryStack.stackPush()) {

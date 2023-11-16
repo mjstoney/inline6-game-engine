@@ -1,6 +1,7 @@
 package dev.mstoney.core;
 
 import dev.mstoney.core.entity.Entity;
+import dev.mstoney.core.lighting.DirectionalLight;
 import dev.mstoney.core.utils.Constants;
 import dev.mstoney.core.utils.Transformation;
 import org.lwjgl.opengl.GL11;
@@ -19,8 +20,8 @@ public class RenderManager {
 
     public void init() throws Exception {
         shader = new ShaderManager();
-        shader.createVertexShader(Utils.loadResource("/shaders/vertex.vs"));
-        shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fs"));
+        shader.createVertexShader(Utils.loadResource("/shaders/vertex.vsh"));
+        shader.createFragmentShader(Utils.loadResource("/shaders/fragment.fsh"));
         shader.link();
         shader.createUniform("textureSampler");
         shader.createUniform("transformationMatrix");
@@ -28,11 +29,13 @@ public class RenderManager {
         shader.createUniform("viewMatrix");
         shader.createUniform("ambientLight");
         shader.createMaterialUniform("material");
+        shader.createUniform("specularPower");
+        shader.createDirectionalLightUniform("directionalLight");
 
 
     }
 
-    public void render(Entity entity, Camera camera) {
+    public void render(Entity entity, Camera camera, DirectionalLight directionalLight) {
         clear();
         shader.bind();
         shader.setUniform("textureSampler", 0);
@@ -41,6 +44,9 @@ public class RenderManager {
         shader.setUniform("viewMatrix", Transformation.getViewMatrix(camera));
         shader.setUniform("material", entity.getModel().getMaterial());
         shader.setUniform("ambientLight", Constants.AMBIENT_LIGHT);
+        shader.setUniform("specularPower", Constants.SPECULAR_POWER);
+        shader.setUniform("directionalLight", directionalLight);
+
         GL30.glBindVertexArray(entity.getModel().getId());
         GL20.glEnableVertexAttribArray(0);
         GL20.glEnableVertexAttribArray(1);
