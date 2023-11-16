@@ -1,5 +1,6 @@
 package dev.mstoney.core;
 
+import dev.mstoney.core.entity.Material;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -12,7 +13,7 @@ import java.util.Map;
 public class ShaderManager {
     private final int programID;
     private int vertexShaderID, fragmentShaderID;
-    private final Map<String, Integer> uniforms;
+    private final Map<String, Integer> uniforms; // maps uniformName to uniform location
     ShaderManager() throws Exception {
         programID = GL20.glCreateProgram();
         if (programID == 0) {
@@ -28,12 +29,25 @@ public class ShaderManager {
         uniforms.put(uniformName, uniformLocation);
     }
 
+    public void createMaterialUniform(String uniformName) throws Exception {
+        createUniform(uniformName + ".ambient");
+        createUniform(uniformName + ".diffuse");
+        createUniform(uniformName + ".specular");
+        createUniform(uniformName + ".hasTexture");
+        createUniform(uniformName + ".reflectance");
+    }
     public void setUniform(String uniformName, Matrix4f value) {
         try(MemoryStack stack = MemoryStack.stackPush()) {
             GL20.glUniformMatrix4fv(uniforms.get(uniformName), false, value.get(stack.mallocFloat(16)));
-
-
         }
+    }
+    
+    public void setUniform(String uniformName, Material material) {
+        setUniform(uniformName + ".diffuse", material.getAmbientColor());
+        setUniform(uniformName + ".ambient", material.getDiffuseColor());
+        setUniform(uniformName + ".specular", material.getSpecularColor());
+        setUniform(uniformName + ".hasTexture", material.hasTexture() ? 1 : 0);
+        setUniform(uniformName + ".reflectance", material.getReflectance());
     }
     public void setUniform(String uniformName, Vector4f value) {
         GL20.glUniform4f(uniforms.get(uniformName), value.x, value.y, value.z, value.w);

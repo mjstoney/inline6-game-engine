@@ -7,7 +7,7 @@ import test.Launcher;
 
 public class EngineManager {
     public static final long NANOSECOND = 1000000000L;
-    public static final float FRAMERATE = 1000;
+    public static final float FRAMERATE = 60;
 
     private static int fps;
     private float frametime = 1.0f / FRAMERATE;

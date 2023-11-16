@@ -23,7 +23,7 @@ public class TestGame implements ILogic {
         renderer = new RenderManager();
         window = Launcher.getWindow();
         loader = new ObjectLoader();
-        camera = new Camera(new Vector3f(0, 0, 5), new Vector3f(0, 0, 0));
+        camera = new Camera(new Vector3f(0, 0, 2), new Vector3f(0, 0, 0));
         cameraInc = new Vector3f(0, 0, 0);
     }
     @Override
@@ -82,7 +82,7 @@ public class TestGame implements ILogic {
                 4, 6, 7, 5, 4, 7,
         };
         Model model = loader.loadOBJModel("/models/bunny.obj");
-        model.setTexture(new Texture(loader.loadTexture("textures/blue.png")));
+        model.setTexture(new Texture(loader.loadTexture("textures/blue.png")), 1.0f);
         entity = new Entity(model,
                 new Vector3f(0, 0, 0),
                 new Vector3f(0, 0, 0),
@@ -124,7 +124,7 @@ public class TestGame implements ILogic {
 
 
 
-        entity.incRotation(0.0f, 0.5f, 0.5f);
+        entity.incRotation(0.0f, 0.25f, 0.0f);
     }
 
     @Override
@@ -133,7 +133,6 @@ public class TestGame implements ILogic {
             GL11.glViewport(0, 0, window.getWidth(), window.getHeight());
             window.setResize(true);
         }
-        window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         renderer.render(entity, camera);
     }
 
